@@ -5,7 +5,10 @@ A solution to the [Unfair Nim Game](https://www.hackerrank.com/challenges/unfair
 Run it with:
 
 ```
-ruby main.rb
+$ ruby main.rb 
+2
+3
+6
 ```
 
 Or run the specs with:
