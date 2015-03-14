@@ -3,29 +3,33 @@ class UnfairNim
 
   def initialize(heaps)
     @heaps = heaps.clone
-    @number_of_stones = nil
+    @stones = 0
+    @solved = false
   end
 
   def solve
-    return @number_of_stones if @number_of_stones
-
-    @number_of_stones = 0
-    @nim_sum = calculate_nim_sum
-    while @nim_sum != 0
-      @heaps[selected_heap_index] += 1
-      @number_of_stones += 1
-      @nim_sum = calculate_nim_sum
+    unless solved?
+      while friend_winning?
+        heap = choose_heap
+        add_stone(heap)
+      end
     end
-    @number_of_stones
+
+    @stones
   end
 
   private
 
-  def calculate_nim_sum
-    @heaps.reduce{|x, y| x ^ y}
+  def solved?
+    @solved
   end
 
-  def selected_heap_index
+  def friend_winning?
+    @nim_sum = @heaps.reduce{|x, y| x ^ y}
+    @solved = @nim_sum != 0
+  end
+
+  def choose_heap
     heap_nim_sums = @heaps.map{|x| x ^ @nim_sum}
 
     if heap_nim_sums.uniq.length == 1
@@ -34,5 +38,10 @@ class UnfairNim
       index = heap_nim_sums.index{|x| x > @nim_sum}
     end
     index
+  end
+
+  def add_stone(heap)
+    @heaps[heap] += 1
+    @stones += 1
   end
 end
